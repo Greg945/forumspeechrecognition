@@ -19,22 +19,18 @@ def gemini(text, counter):
   # Context laenge loeschen
   rows = app_tables.context.search()
   if len(rows) >= 4:
-    #numbers = [r['Number'] for r in app_tables.context.search()]
-    #rows = app_tables.context.search(Number=min(numbers))
-    #for row in rows:
-    #  row.delete()
-    for _ in range(2):
-      delete_row = app_tables.context.search(tables.order_by("Number"))[0]
-      delete_row.delete()
+    numbers = [r['Number'] for r in app_tables.context.search()]
+    rows = app_tables.context.search(Number=min(numbers))
+    for row in rows:
+      row.delete()
+    #for _ in range(2):
+    #  delete_row = app_tables.context.search(tables.order_by("Number"))[0]
+    #  delete_row.delete()
   # Alle Zeilen aus der Tabelle holen
-  info = [
-  {
-    'Speeker': r['Speeker'],
-    'Text': r['Text'],
-  }
-  for r in app_tables.context.search()
-  ]
-  print(info)
+  Context = ""
+  for row in app_tables.context.search():
+    Context += f"{row['Speeker']} : {row['Text']}, "
+  print(Context)
 
   print(response.text)
   return response.text
