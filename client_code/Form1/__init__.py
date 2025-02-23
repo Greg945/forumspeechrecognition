@@ -8,6 +8,7 @@ import anvil.js.window as window
 import anvil.js
 
 counter=0
+checked=0
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
 
 class Form1(Form1Template):
@@ -43,9 +44,11 @@ class Form1(Form1Template):
 
         # Wenn es finalen Text gibt, dann rufe anvil.server.call auf
         if final_text.strip():
-          print('apicall for: ', final_text.strip())
+          print('Apicall for: ', final_text.strip())
           counter+=1
-          anvil.server.call("gemini", final_text.strip(), counter)
+          response = anvil.server.call("gemini", final_text.strip(), counter)  # Antwort abrufen
+        
+          self.output_box.text = response
     
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
@@ -71,3 +74,35 @@ class Form1(Form1Template):
     def delete_alles_click(self, **event_args):
       """This method is called when the button is clicked"""
       app_tables.context.delete_all_rows()
+
+    def stop_click(self, **event_args):
+      """This method is called when the button is clicked"""
+      self.recognition.stop()
+      self.button_1.text = "Start"
+      self.button_1.icon = "fa:play"
+      self.button_1.enabled = True
+      self.is_listening = False
+
+    def History_change(self, **event_args):
+      global checked
+      
+      """This method is called when this checkbox is checked or unchecked"""
+      if checked == 0:
+        print("changed")
+        checked = 1
+        Context = ""
+        for row in app_tables.context.search():
+          Context += f"'{row['Speeker']}' : '{row['Text']}',"
+        self.history_box.text = Context
+      else:
+        checked = 0
+        self.history_box.text = ""
+
+  
+    def input_box_pressed_enter(self, **event_args):
+      print('Apicall for: ', self.input_box.text)
+      response = anvil.server.call("gemini", self.input_box.text, counter)  # Antwort abrufen
+      self.output_box.text = response
+      self.input_box.text = ''
+    
+      

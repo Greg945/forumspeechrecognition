@@ -8,9 +8,12 @@ client = genai.Client(api_key="AIzaSyA3iQXk6-M5XQhzLIMO3SfEAKDPRunTHP8")
 
 @anvil.server.callable
 def gemini(text, counter):
+  Context = ""
+  for row in app_tables.context.search():
+    Context += f"'{row['Speeker']}' : '{row['Text']}',"
   response = client.models.generate_content(
     model="gemini-2.0-flash",
-    contents='Wenn ich eine Frage stelel antworte bitte normal. Wenn es keine Frage ist antworte nur mit "Igonriert". Das hier ist der prompt: ' + text,
+    contents='Wenn ich eine Frage stelel antworte bitte normal. Wenn es keine Frage ist antworte nur mit "Igonriert". Hier ist noch der Konversations Verlauf, beachte diesen wenn er notwendig ist: "' +  Context + '" Das hier ist der prompt: ' + text,
     #contents=text,
   )
   app_tables.context.add_row(Speeker="User", Text=text, Number=counter)
@@ -18,19 +21,11 @@ def gemini(text, counter):
 
   # Context laenge loeschen
   rows = app_tables.context.search()
-  if len(rows) >= 4:
+  if len(rows) >= 20:
     numbers = [r['Number'] for r in app_tables.context.search()]
     rows = app_tables.context.search(Number=min(numbers))
     for row in rows:
       row.delete()
-    #for _ in range(2):
-    #  delete_row = app_tables.context.search(tables.order_by("Number"))[0]
-    #  delete_row.delete()
-  # Alle Zeilen aus der Tabelle holen
-  Context = ""
-  for row in app_tables.context.search():
-    Context += f"{row['Speeker']} : {row['Text']}, "
-  print(Context)
 
   print(response.text)
   return response.text
