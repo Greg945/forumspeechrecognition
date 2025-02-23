@@ -15,17 +15,17 @@ class Form1(Form1Template):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
         
-        self.recognition = SpeechRecognition()
-        self.recognition.continuous = True  # Fortlaufende Erkennung
-        self.recognition.lang = 'de-DE'
-        self.recognition.interimResults = True  # Zeigt Zwischenresultate an
-        self.recognition.maxAlternatives = 1
+        recognition = SpeechRecognition()
+        recognition.continuous = True  # Fortlaufende Erkennung
+        recognition.lang = 'de-DE'
+        recognition.interimResults = True  # Zeigt Zwischenresultate an
+        recognition.maxAlternatives = 1
         
-        self.recognition.onresult = self.on_result
-        self.recognition.onspeechend = self.on_speech_end
-        self.recognition.onnomatch = self.on_no_match
-        self.recognition.onerror = self.on_error
-        self.recognition.onsoundend = self.on_sound_end
+        recognition.onresult = on_result
+        recognition.onspeechend = on_speech_end
+        recognition.onnomatch = on_no_match
+        recognition.onerror = on_error
+        recognition.onsoundend = on_sound_end
         
         self.is_listening = False
     
@@ -36,10 +36,11 @@ class Form1(Form1Template):
       self.hint.text = f"Live: {text.strip()}"
       #anvil.server.call("gemini", text)
       
-    def on_sound_end(slef, event):
+    def on_sound_end(self, event):
       print("speechend")
   
-    def on_speech_end(self, event)
+    def on_speech_end(self, e):
+      print("speechend")
       if self.is_listening:
         self.recognition.start()  # Direkt neu starten für kontinuierliche Erkennung
     
