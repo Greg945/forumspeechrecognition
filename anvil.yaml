@@ -3,10 +3,14 @@ correct_dependency_ids: {}
 db_schema: {}
 dependencies: []
 metadata: {}
-name: Clone of ForumSpeechRecognition
+name: SpeechtoGemini
 package_name: ForumSpeechRecognition
 renamed: true
-runtime_options: {client_version: '3', server_spec: null, server_version: python3-full, version: 2}
+runtime_options:
+  client_version: '3'
+  server_spec: {base: python310-standard}
+  server_version: python3-full
+  version: 2
 services:
 - client_config: {}
   server_config: {}

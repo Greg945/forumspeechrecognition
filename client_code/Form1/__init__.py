@@ -1,5 +1,6 @@
 from ._anvil_designer import Form1Template
 from anvil import *
+import anvil.server
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
@@ -16,7 +17,7 @@ class Form1(Form1Template):
         
         self.recognition = SpeechRecognition()
         self.recognition.continuous = True  # Fortlaufende Erkennung
-        self.recognition.lang = 'en-US'
+        self.recognition.lang = 'de-DE'
         self.recognition.interimResults = True  # Zeigt Zwischenresultate an
         self.recognition.maxAlternatives = 1
         
@@ -24,18 +25,23 @@ class Form1(Form1Template):
         self.recognition.onspeechend = self.on_speech_end
         self.recognition.onnomatch = self.on_no_match
         self.recognition.onerror = self.on_error
+        self.recognition.onsoundend = self.on_sound_end
         
         self.is_listening = False
     
     def on_result(self, event):
-        text = ''
-        for result in event.results:
-            text += result[0].transcript + ' '
-        self.hint.text = f"Live: {text.strip()}"
-    
-    def on_speech_end(self, event):
-        if self.is_listening:
-            self.recognition.start()  # Direkt neu starten für kontinuierliche Erkennung
+      text = ''
+      for result in event.results:
+        text += result[0].transcript + ' '
+      self.hint.text = f"Live: {text.strip()}"
+      #anvil.server.call("gemini", text)
+      
+    def on_sound_end(slef, event):
+      print("speechend")
+  
+    def on_speech_end(self, event)
+      if self.is_listening:
+        self.recognition.start()  # Direkt neu starten für kontinuierliche Erkennung
     
     def on_no_match(self, event):
         self.hint.text = "I didn't recognise that"
