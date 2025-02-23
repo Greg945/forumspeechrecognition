@@ -16,17 +16,18 @@ class Form1(Form1Template):
         self.init_components(**properties)
         
         recognition = SpeechRecognition()
-        recognition.continuous = True  # Fortlaufende Erkennung
+        recognition.continuous = False  # Fortlaufende Erkennung
         recognition.lang = 'de-DE'
-        recognition.interimResults = True  # Zeigt Zwischenresultate an
+        recognition.interimResults = False  # Zeigt Zwischenresultate an
         recognition.maxAlternatives = 1
         
-        recognition.onresult = on_result
-        recognition.onspeechend = on_speech_end
-        recognition.onnomatch = on_no_match
-        recognition.onerror = on_error
-        recognition.onsoundend = on_sound_end
-        
+        recognition.onresult = self.on_result
+        recognition.onspeechend = self.on_speech_end
+        recognition.onnomatch = self.on_no_match
+        recognition.onerror = self.on_error
+        recognition.onsoundend = self.on_sound_end
+
+        self.recognition = recognition
         self.is_listening = False
     
     def on_result(self, event):
@@ -50,7 +51,7 @@ class Form1(Form1Template):
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
         if self.is_listening:
-            self.recognition.start()
+            recognition.start()
     
     def button_1_click(self, **event_args):
         """Diese Methode wird aufgerufen, wenn der Button geklickt wird"""
