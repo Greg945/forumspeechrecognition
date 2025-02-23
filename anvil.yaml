@@ -1,6 +1,20 @@
 allow_embedding: false
 correct_dependency_ids: {}
-db_schema: {}
+db_schema:
+  context:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: Speeker
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: Text
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: Number
+      type: number
+    server: full
+    title: Context
 dependencies: []
 metadata: {}
 name: SpeechtoGemini

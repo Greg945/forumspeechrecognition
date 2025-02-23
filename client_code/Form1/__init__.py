@@ -7,54 +7,53 @@ from anvil.tables import app_tables
 import anvil.js.window as window
 import anvil.js
 
+counter=0
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
-SpeechGrammarList = window.get("SpeechGrammarList") or window.get("webkitSpeechGrammarList")
 
 class Form1(Form1Template):
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
-        
-        recognition = SpeechRecognition()
-        recognition.continuous = False  # Fortlaufende Erkennung
-        recognition.lang = 'de-DE'
-        recognition.interimResults = False  # Zeigt Zwischenresultate an
-        recognition.maxAlternatives = 1
-        
-        recognition.onresult = self.on_result
-        recognition.onspeechend = self.on_speech_end
-        recognition.onnomatch = self.on_no_match
-        recognition.onerror = self.on_error
-        recognition.onsoundend = self.on_sound_end
 
-        self.recognition = recognition
+        self.recognition = SpeechRecognition()
+        self.recognition.continuous = True  # Fortlaufende Erkennung
+        self.recognition.lang = 'de-DE'
+        self.recognition.interimResults = False  # Zwischenresultate anzeigen
+        self.recognition.maxAlternatives = 1
+
+        self.recognition.onresult = self.on_result
+        self.recognition.onerror = self.on_error
+
         self.is_listening = False
     
     def on_result(self, event):
-      text = ''
-      for result in event.results:
-        text += result[0].transcript + ' '
-      self.hint.text = f"Live: {text.strip()}"
-      #anvil.server.call("gemini", text)
-      
-    def on_sound_end(self, event):
-      print("speechend")
-  
-    def on_speech_end(self, e):
-      print("speechend")
-      if self.is_listening:
-        self.recognition.start()  # Direkt neu starten für kontinuierliche Erkennung
-    
-    def on_no_match(self, event):
-        self.hint.text = "I didn't recognise that"
+        global counter
+        text = ''
+        final_text = ''
+        
+        for i in range(event.results.length):
+            transcript = event.results[i][0].transcript
+            text += transcript + ' '
+
+            # Wenn das Ergebnis final ist, speichern
+            if event.results[i].isFinal:
+                final_text = transcript + ' '
+
+        self.hint.text = f"Live: {text.strip()}"
+
+        # Wenn es finalen Text gibt, dann rufe anvil.server.call auf
+        if final_text.strip():
+          print('apicall for: ', final_text.strip())
+          counter+=1
+          anvil.server.call("gemini", final_text.strip(), counter)
     
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
         if self.is_listening:
-            recognition.start()
-    
+            self.recognition.start()
+
     def button_1_click(self, **event_args):
-        """Diese Methode wird aufgerufen, wenn der Button geklickt wird"""
+        """Startet oder stoppt die Erkennung"""
         if not self.is_listening:
             self.recognition.start()
             self.button_1.text = "Recording..."
