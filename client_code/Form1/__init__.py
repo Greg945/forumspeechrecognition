@@ -9,26 +9,23 @@ import anvil.js
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
 SpeechGrammarList = window.get("SpeechGrammarList") or window.get("webkitSpeechGrammarList")
   
-grammar = '#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;'
-
 class Form1(Form1Template):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     
     recognition = SpeechRecognition()
-    speechRecognitionList = SpeechGrammarList()
-    speechRecognitionList.addFromString(grammar, 1)
-    recognition.grammars = speechRecognitionList
+    #speechRecognitionList = SpeechGrammarList()
+    #speechRecognitionList.addFromString(1)
+    #recognition.grammars = speechRecognitionList
     recognition.continuous = False
     recognition.lang = 'en-US'
     recognition.interimResults = False
     recognition.maxAlternatives = 1
     
     def on_result(event):
-      color = event.results[0][0].transcript
-      self.hint.text = f"Received: {color}"
-      self.card.background = color
+      text = event.results[0][0].transcript
+      self.hint.text = f"Received: {text}"
       
     def on_speech_end(e):
       recognition.stop()
