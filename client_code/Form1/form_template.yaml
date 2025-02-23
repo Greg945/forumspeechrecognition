@@ -9,6 +9,11 @@ components:
     name: hint
     properties: {align: center, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: null, spacing_above: small, spacing_below: small, text: Click the button above and then say a color, tooltip: '', underline: false, visible: true}
     type: Label
+  - event_bindings: {click: delete_alles_click}
+    layout_properties: {grid_position: 'ACTFXA,ANUYLU'}
+    name: delete_alles
+    properties: {text: Context Clear}
+    type: Button
   - data_bindings: []
     layout_properties: {grid_position: 'DYMBUZ,MNNMNR'}
     name: card

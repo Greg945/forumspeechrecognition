@@ -67,3 +67,7 @@ class Form1(Form1Template):
             self.button_1.icon = "fa:play"
             self.button_1.enabled = True
             self.is_listening = False
+
+    def delete_alles_click(self, **event_args):
+      """This method is called when the button is clicked"""
+      app_tables.context.delete_all_rows()
