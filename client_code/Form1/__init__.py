@@ -18,6 +18,8 @@ class Form1(Form1Template):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
+        self.language.items = [("Deutsch"), ("Englisch"), ("Französisch")]
+
         self.recognition = SpeechRecognition()
         self.recognition.continuous = True  # Fortlaufende Erkennung
         self.recognition.lang = sttlang
@@ -111,6 +113,16 @@ class Form1(Form1Template):
     def language_change(self, **event_args):
       global sttlang
       """This method is called when an item is selected"""
+      if self.language.selected_value == "Deutsch":
+        print("deustsch")
+        sttlang = "de-DE"
+      if self.language.selected_value == "Englisch":
+        print("englisch")
+        sttlang = "en-UK"
+      if self.language.selected_value == "Französisch":
+        print("frnace")
+        sttlang = "fr-FR"
+      
       
     
       
