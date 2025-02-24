@@ -6,7 +6,7 @@ from google.genai import types
 from collections import defaultdict
 from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
 
-sys_instruct='Wenn ich eine Frage stelel antworte bitte normal. Wenn es keine Frage ist antworte nur mit "Igonriert".'
+sys_instruct='Du bist ein mithoerender Assisten, in einem Klassenzimmer. Wenn du eine Frage hörst beantworte sie bitte normal. Wenn es keine Frage ist antworte nur mit "Igonriert". Außerdem wirst du auch immer den Konversationsverlauf bekommen, denn du nur benutzt, falls du Informationen daraus zur beantwortung der Frage brauchst'
 client = genai.Client(api_key="AIzaSyA3iQXk6-M5XQhzLIMO3SfEAKDPRunTHP8")
 
 google_search_tool = Tool(
@@ -22,7 +22,7 @@ def gemini(text, counter, search):
     response = client.models.generate_content(
       model="gemini-2.0-flash",
       config=types.GenerateContentConfig(system_instruction=sys_instruct, tools=[google_search_tool], response_modalities=["TEXT"]),
-      contents=' Hier ist noch der Konversations Verlauf, beachte diesen wenn er notwendig ist: "' +  Context + '" Das hier ist der prompt: ' + text
+      contents='Konversations Verlauf:"' +  Context + '" Das hier ist das gehörte im Klassenraum(antworte ab jetzt nur noch mit den Antworten der Frage oder mit "Ignoriert"): ' + text
     )
   else:
     response = client.models.generate_content(
