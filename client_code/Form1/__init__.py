@@ -9,11 +9,12 @@ import anvil.js
 
 counter=0
 checked=0
+searchchecked=0
 sttlang="de-DE"
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
 
 class Form1(Form1Template):
-    global sttlang
+    global sttlang, checked, searchchecked
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
@@ -32,7 +33,7 @@ class Form1(Form1Template):
         self.is_listening = False
     
     def on_result(self, event):
-        global counter
+        global counter, searchchecked
         text = ''
         final_text = ''
         
@@ -48,10 +49,12 @@ class Form1(Form1Template):
 
         # Wenn es finalen Text gibt, dann rufe anvil.server.call auf
         if final_text.strip():
-          print('Apicall for: ', final_text.strip())
+          print('Apicall for: ', self.search_lever.checked(), final_text.strip())
           counter+=1
-          response = anvil.server.call("gemini", final_text.strip(), counter)  # Antwort abrufen
-        
+          if searchchecked == 1:
+            response = anvil.server.call("gemini", self.input_box.text, counter, "true")
+          else:
+            response = anvil.server.call("gemini", self.input_box.text, counter, "false")
           self.output_box.text = response
     
     def on_error(self, event):
@@ -60,7 +63,6 @@ class Form1(Form1Template):
             self.recognition.start()
 
     def button_1_click(self, **event_args):
-        """Startet oder stoppt die Erkennung"""
         if not self.is_listening:
             self.recognition.start()
             self.button_1.text = "Recording..."
@@ -76,11 +78,9 @@ class Form1(Form1Template):
             self.is_listening = False
 
     def delete_alles_click(self, **event_args):
-      """This method is called when the button is clicked"""
       app_tables.context.delete_all_rows()
 
     def stop_click(self, **event_args):
-      """This method is called when the button is clicked"""
       self.recognition.stop()
       self.button_1.text = "Start"
       self.button_1.icon = "fa:play"
@@ -89,8 +89,6 @@ class Form1(Form1Template):
 
     def History_change(self, **event_args):
       global checked
-      
-      """This method is called when this checkbox is checked or unchecked"""
       if checked == 0:
         print("changed")
         checked = 1
@@ -104,15 +102,19 @@ class Form1(Form1Template):
 
   
     def input_box_pressed_enter(self, **event_args):
+      global searchchecked
       print('Apicall for: ', self.input_box.text)
-      response = anvil.server.call("gemini", self.input_box.text, counter)  # Antwort abrufen
+      if searchchecked == 1:
+        print("test")
+        response = anvil.server.call("gemini", self.input_box.text, counter, "true")
+      else:
+                response = anvil.server.call("gemini", self.input_box.text, counter, "false")
       self.output_box.text = response
       self.input_box.text = ''
 
     
     def language_change(self, **event_args):
       global sttlang
-      """This method is called when an item is selected"""
       if self.language.selected_value == "Deutsch":
         print("deustsch")
         sttlang = "de-DE"
@@ -122,6 +124,13 @@ class Form1(Form1Template):
       if self.language.selected_value == "Französisch":
         print("frnace")
         sttlang = "fr-FR"
+
+    def search_lever_change(self, **event_args):
+      global searchchecked
+      if searchchecked == 0:
+        searchchecked = 1
+      else:
+        searchchecked = 0
       
       
     

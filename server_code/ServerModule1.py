@@ -4,20 +4,32 @@ import anvil.server
 from google import genai
 from google.genai import types
 from collections import defaultdict
+from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
 
 sys_instruct='Wenn ich eine Frage stelel antworte bitte normal. Wenn es keine Frage ist antworte nur mit "Igonriert".'
 client = genai.Client(api_key="AIzaSyA3iQXk6-M5XQhzLIMO3SfEAKDPRunTHP8")
 
+google_search_tool = Tool(
+    google_search = GoogleSearch()
+)
+
 @anvil.server.callable
-def gemini(text, counter):
+def gemini(text, counter, search):
   Context = ""
   for row in app_tables.context.search():
     Context += f"'{row['Speeker']}' : '{row['Text']}',"
-  response = client.models.generate_content(
-    model="gemini-2.0-flash",
-    config=types.GenerateContentConfig(system_instruction=sys_instruct),
-    contents=' Hier ist noch der Konversations Verlauf, beachte diesen wenn er notwendig ist: "' +  Context + '" Das hier ist der prompt: ' + text
-  )
+  if search == "true":
+    response = client.models.generate_content(
+      model="gemini-2.0-flash",
+      config=types.GenerateContentConfig(system_instruction=sys_instruct, tools=[google_search_tool], response_modalities=["TEXT"]),
+      contents=' Hier ist noch der Konversations Verlauf, beachte diesen wenn er notwendig ist: "' +  Context + '" Das hier ist der prompt: ' + text
+    )
+  else:
+    response = client.models.generate_content(
+      model="gemini-2.0-flash",
+      config=types.GenerateContentConfig(system_instruction=sys_instruct),
+      contents=' Hier ist noch der Konversations Verlauf, beachte diesen wenn er notwendig ist: "' +  Context + '" Das hier ist der prompt: ' + text
+    )
   app_tables.context.add_row(Speeker="User", Text=text, Number=counter)
   app_tables.context.add_row(Speeker="Gemini", Text=response.text, Number=counter)
 
