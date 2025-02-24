@@ -9,16 +9,18 @@ import anvil.js
 
 counter=0
 checked=0
+sttlang="de-DE"
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
 
 class Form1(Form1Template):
+    global sttlang
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
         self.recognition = SpeechRecognition()
         self.recognition.continuous = True  # Fortlaufende Erkennung
-        self.recognition.lang = 'de-DE'
+        self.recognition.lang = sttlang
         self.recognition.interimResults = False  # Zwischenresultate anzeigen
         self.recognition.maxAlternatives = 1
 
@@ -104,5 +106,9 @@ class Form1(Form1Template):
       response = anvil.server.call("gemini", self.input_box.text, counter)  # Antwort abrufen
       self.output_box.text = response
       self.input_box.text = ''
+
+    def lang_pressed_enter(self, **event_args):
+      """This method is called when the user presses Enter in this text box"""
+      sttlang = self.lang.text 
     
       

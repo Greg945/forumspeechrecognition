@@ -10,6 +10,11 @@ components:
     name: stop
     properties: {foreground: white, text: Stoppen}
     type: Button
+  - event_bindings: {pressed_enter: lang_pressed_enter}
+    layout_properties: {grid_position: 'KOZLJG,CFMTDK'}
+    name: lang
+    properties: {}
+    type: TextBox
   - event_bindings: {click: delete_alles_click}
     layout_properties: {grid_position: 'SHTUCY,FQUZDM'}
     name: delete_alles
