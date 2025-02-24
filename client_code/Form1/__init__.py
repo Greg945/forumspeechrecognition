@@ -9,7 +9,7 @@ import anvil.js
 
 counter=0
 checked=0
-sttlang="de-DE"
+sttlang="en-US"
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
 
 class Form1(Form1Template):
@@ -108,7 +108,9 @@ class Form1(Form1Template):
       self.input_box.text = ''
 
     def lang_pressed_enter(self, **event_args):
+      global sttlang
       """This method is called when the user presses Enter in this text box"""
       sttlang = self.lang.text 
+      self.lang.text = ""
     
       
