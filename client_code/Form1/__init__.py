@@ -49,7 +49,7 @@ class Form1(Form1Template):
 
         # Wenn es finalen Text gibt, dann rufe anvil.server.call auf
         if final_text.strip():
-          print('Apicall for: ', self.search_lever.checked(), final_text.strip())
+          print('Apicall for: ', final_text.strip())
           counter+=1
           if searchchecked == 1:
             response = anvil.server.call("gemini", self.input_box.text, counter, "true")
