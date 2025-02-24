@@ -59,8 +59,8 @@ class Form1(Form1Template):
     
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
-        if self.is_listening:
-            self.recognition.start()
+        #if self.is_listening:
+        #    self.recognition.start()
 
     def button_1_click(self, **event_args):
         if not self.is_listening:
