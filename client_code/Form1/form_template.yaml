@@ -11,9 +11,9 @@ components:
     properties: {foreground: white, text: Stoppen}
     type: Button
   - event_bindings: {pressed_enter: lang_pressed_enter}
-    layout_properties: {grid_position: 'KOZLJG,CFMTDK'}
+    layout_properties: {grid_position: 'OEWSAB,HDDUEB'}
     name: lang
-    properties: {}
+    properties: {foreground: 'Whit '}
     type: TextBox
   - event_bindings: {click: delete_alles_click}
     layout_properties: {grid_position: 'SHTUCY,FQUZDM'}
@@ -34,7 +34,7 @@ components:
     properties: {background: '', foreground: white}
     type: Label
   - event_bindings: {change: History_change}
-    layout_properties: {grid_position: ',MMLQJN'}
+    layout_properties: {grid_position: 'ODYOPV,JQHYWD'}
     name: History
     properties: {align: center, foreground: white, text: History}
     type: CheckBox
@@ -44,7 +44,7 @@ components:
     type: Label
   layout_properties: {slot: default}
   name: content_panel
-  properties: {background: '#222223', col_widths: '{"MMLQJN":5}'}
+  properties: {background: '#222223', col_widths: '{}'}
   type: ColumnPanel
 - layout_properties: {slot: nav-right}
   name: navbar_links
