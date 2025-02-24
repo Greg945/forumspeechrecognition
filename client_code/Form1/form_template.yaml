@@ -3,38 +3,63 @@ components:
   - event_bindings: {click: button_1_click}
     layout_properties: {grid_position: 'TTVZPH,RXKEBW'}
     name: button_1
-    properties: {align: center, background: '#222223', bold: false, border: '', enabled: true, font: '', font_size: null, foreground: white, icon: 'fa:play', icon_align: left, italic: false, role: primary-color, spacing_above: small, spacing_below: small, text: Start, tooltip: '', underline: false, visible: true}
+    properties: {align: center, background: black, bold: false, border: '', enabled: true, font: '', font_size: null, foreground: white, icon: 'fa:play', icon_align: left, italic: false, role: primary-color, spacing_above: small, spacing_below: small, text: Start, tooltip: '', underline: false, visible: true}
     type: Button
   - event_bindings: {click: stop_click}
     layout_properties: {grid_position: 'SZDMVP,HTYNUD'}
     name: stop
-    properties: {foreground: white, text: Stoppen}
+    properties: {background: black, border: '', foreground: white, text: Stoppen}
     type: Button
-  - event_bindings: {pressed_enter: lang_pressed_enter}
+  - layout_properties: {grid_position: 'OEWSAB,YFPETU'}
+    name: label_3
+    properties: {foreground: white, text: 'Language:'}
+    type: Label
+  - data_bindings: []
+    event_bindings: {change: language_change}
     layout_properties: {grid_position: 'OEWSAB,HDDUEB'}
-    name: lang
-    properties: {foreground: 'Whit '}
-    type: TextBox
+    name: language
+    properties:
+      include_placeholder: false
+      items: ['(["One", "Two", "Three"])']
+    type: DropDown
   - event_bindings: {click: delete_alles_click}
     layout_properties: {grid_position: 'SHTUCY,FQUZDM'}
     name: delete_alles
-    properties: {foreground: white, text: Context Clear}
+    properties:
+      background: black
+      enabled: true
+      foreground: white
+      spacing:
+        padding: [null, null, null, null]
+      text: Context Clear
     type: Button
+  - layout_properties: {grid_position: 'RTILIN,CQQUZC'}
+    name: label_4
+    properties: {foreground: white, text: 'Hint:'}
+    type: Label
   - layout_properties: {grid_position: 'RTILIN,IJZFHR'}
     name: hint
     properties: {align: center, background: '', bold: false, border: '', font: '', font_size: null, foreground: white, icon: '', icon_align: left, italic: false, role: null, spacing_above: small, spacing_below: small, text: Hint, tooltip: '', underline: false, visible: true}
     type: Label
+  - layout_properties: {grid_position: 'DVQHPF,QSOZSV'}
+    name: label_2
+    properties: {foreground: white, text: 'Input:'}
+    type: Label
   - event_bindings: {pressed_enter: input_box_pressed_enter}
     layout_properties: {grid_position: 'DVQHPF,CKQAWO'}
     name: input_box
-    properties: {foreground: white}
+    properties: {background: black, foreground: white}
     type: TextBox
+  - layout_properties: {grid_position: 'KMEHGV,TMPZRH'}
+    name: label_1
+    properties: {foreground: white, text: 'Output:'}
+    type: Label
   - layout_properties: {grid_position: 'KMEHGV,NXKPHA'}
     name: output_box
     properties: {background: '', foreground: white}
     type: Label
   - event_bindings: {change: History_change}
-    layout_properties: {grid_position: 'ODYOPV,JQHYWD'}
+    layout_properties: {grid_position: 'HKDHAJ,SWOTXE'}
     name: History
     properties: {align: center, foreground: white, text: History}
     type: CheckBox
@@ -44,7 +69,7 @@ components:
     type: Label
   layout_properties: {slot: default}
   name: content_panel
-  properties: {background: '#222223', col_widths: '{}'}
+  properties: {background: '#222223', col_widths: '{"TMPZRH":5,"NXKPHA":55,"QSOZSV":5,"CKQAWO":55,"YFPETU":5,"HDDUEB":55,"CQQUZC":5,"IJZFHR":55,"DDWOVU":65,"SWOTXE":10}'}
   type: ColumnPanel
 - layout_properties: {slot: nav-right}
   name: navbar_links
