@@ -12,11 +12,11 @@ checked=0
 searchchecked=0
 sttlang="de-DE"
 SpeechRecognition = window.get("SpeechRecognition") or window.get("webkitSpeechRecognition")
+navigator = window.navigator
 
 class Form1(Form1Template):
     global sttlang, checked, searchchecked
     def __init__(self, **properties):
-        # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
         self.language.items = [("Deutsch"), ("Englisch"), ("Französisch")]
@@ -31,7 +31,37 @@ class Form1(Form1Template):
         self.recognition.onerror = self.on_error
 
         self.is_listening = False
+
+        # Nur ein AudioContext für die gesamte Klasse erstellen
+        self.audio_context = window.AudioContext()
+        self.gain_node = self.audio_context.createGain()
+        self.gain_node.gain.value = 3.0  # Lautstärke erhöhen
     
+        # Web Audio API zur Mikrofonverstärkung einrichten
+        self.setup_audio_processing()
+
+    def setup_audio_processing(self):
+        """Initialisiert die Audio-Verarbeitung mit Verstärkung"""
+        try:
+            stream = window.navigator.mediaDevices.getUserMedia({"audio": True})
+            self.process_audio(stream)  # Direkt weiterverarbeiten
+        except Exception as e:
+            self.on_audio_error(e)
+
+
+    def process_audio(self, stream):
+        """Verbindet das Mikrofon mit dem Verstärker"""
+        source = self.audio_context.createMediaStreamSource(stream)
+        source.connect(self.gain_node)
+        #self.gain_node.connect(self.audio_context.destination)  # Optional zum Mithören
+
+    def on_audio_error(self, error):
+        self.hint.text = f"Audio Error: {error}"
+
+    
+
+
+
     def on_result(self, event):
         global counter, searchchecked
         text = ''
