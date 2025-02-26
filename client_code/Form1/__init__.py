@@ -6,6 +6,8 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.js.window as window
 import anvil.js
+from anvil.js.window import close, history, open
+
 
 counter=0
 checked=0
@@ -161,6 +163,12 @@ class Form1(Form1Template):
         searchchecked = 1
       else:
         searchchecked = 0
+
+    def close_click(self, **event_args):
+      close()
+      open("https://login.schulportal.hessen.de/?url=aHR0cHM6Ly9jb25uZWN0LnNjaHVscG9ydGFsLmhlc3Nlbi5kZS8=&skin=sp&i=5120")
+      history.back()
+      
       
       
     

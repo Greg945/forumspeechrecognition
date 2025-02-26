@@ -76,6 +76,11 @@ components:
     name: history_box
     properties: {foreground: white}
     type: Label
+  - event_bindings: {click: close_click}
+    layout_properties: {grid_position: 'YKHRJY,NSHGBX'}
+    name: close
+    properties: {background: black, foreground: white, text: Close}
+    type: Button
   layout_properties: {slot: default}
   name: content_panel
   properties: {background: '#222223', col_widths: '{"TMPZRH":5,"NXKPHA":55,"QSOZSV":5,"CKQAWO":55,"YFPETU":10,"HDDUEB":30,"CQQUZC":5,"IJZFHR":55,"DDWOVU":65,"SWOTXE":10,"ZJKSDQ":40}'}
