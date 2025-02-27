@@ -52,11 +52,14 @@ class Form1(Form1Template):
             final_text = " ".join(self.queue)  # Alle gesammelten Texte zusammenfügen
             self.queue.clear()  # Warteschlange leeren
             
-            print('Apicall for:', final_text)
             response = anvil.server.call("gemini", final_text, counter, "true" if searchchecked == 1 else "false")
+            print('Apicall for:', final_text)
             self.output_box.text = response
-        
+    
+    def reset_flag(self):
         self.is_waiting = False  # Flag zurücksetzen
+        if self.queue:
+                self.delayed_server_call()
 
     def setup_audio_processing(self):
         """Initialisiert die Audio-Verarbeitung mit Verstärkung"""
@@ -97,7 +100,8 @@ class Form1(Form1Template):
 
             if not self.is_waiting:  # Falls kein Timer aktiv ist
                 self.is_waiting = True
-                window.setTimeout(self.delayed_server_call, 5000)  # Wartezeit von 5 Sekunden
+                self.delayed_server_call()
+                window.setTimeout(self.reset_flag, 5000)# Wartezeit von 5 Sekunden
     
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
