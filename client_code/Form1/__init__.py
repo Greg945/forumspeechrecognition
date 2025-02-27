@@ -8,7 +8,6 @@ import anvil.js.window as window
 import anvil.js
 from anvil.js.window import close, history, open
 
-
 counter=0
 checked=0
 searchchecked=0
@@ -20,6 +19,11 @@ class Form1(Form1Template):
     global sttlang, checked, searchchecked
     def __init__(self, **properties):
         self.init_components(**properties)
+
+        self.queue = []  # Warteschlange für Anfragen
+        self.is_waiting = False  # Flag, um die Wartezeit zu kontrollieren
+
+    
 
         self.language.items = [("Deutsch"), ("Englisch"), ("Französisch")]
 
@@ -41,6 +45,18 @@ class Form1(Form1Template):
     
         # Web Audio API zur Mikrofonverstärkung einrichten
         self.setup_audio_processing()
+      
+    def delayed_server_call(self):
+        """Sammelt Anfragen und sendet sie nach 5 Sekunden."""
+        if self.queue:
+            final_text = " ".join(self.queue)  # Alle gesammelten Texte zusammenfügen
+            self.queue.clear()  # Warteschlange leeren
+            
+            print('Apicall for:', final_text)
+            response = anvil.server.call("gemini", final_text, counter, "true" if searchchecked == 1 else "false")
+            self.output_box.text = response
+        
+        self.is_waiting = False  # Flag zurücksetzen
 
     def setup_audio_processing(self):
         """Initialisiert die Audio-Verarbeitung mit Verstärkung"""
@@ -67,28 +83,21 @@ class Form1(Form1Template):
 
     def on_result(self, event):
         global counter, searchchecked
-        text = ''
         final_text = ''
-        
+
         for i in range(event.results.length):
             transcript = event.results[i][0].transcript
-            text += transcript + ' '
-
-            # Wenn das Ergebnis final ist, speichern
             if event.results[i].isFinal:
-                final_text = transcript + ' '
+                final_text = transcript.strip()
 
-        self.hint.text = f"Live: {text.strip()}"
+        self.hint.text = f"Live: {final_text}"
 
-        # Wenn es finalen Text gibt, dann rufe anvil.server.call auf
-        if final_text.strip():
-          print('Apicall for: ', final_text.strip())
-          counter+=1
-          if searchchecked == 1:
-            response = anvil.server.call("gemini", self.input_box.text, counter, "true")
-          else:
-            response = anvil.server.call("gemini", self.input_box.text, counter, "false")
-          self.output_box.text = response
+        if final_text:
+            self.queue.append(final_text)  # In Warteschlange einfügen
+
+            if not self.is_waiting:  # Falls kein Timer aktiv ist
+                self.is_waiting = True
+                window.setTimeout(self.delayed_server_call, 5000)  # Wartezeit von 5 Sekunden
     
     def on_error(self, event):
         self.hint.text = f"Error: {event.error}"
