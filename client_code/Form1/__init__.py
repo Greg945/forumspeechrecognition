@@ -59,6 +59,7 @@ class Form1(Form1Template):
 
     def on_audio_error(self, error):
         self.hint.text = f"Audio Error: {error}"
+    
 
     
 
