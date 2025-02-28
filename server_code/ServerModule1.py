@@ -22,14 +22,13 @@ def gemini(text, counter, search):
   
   for row in app_tables.context.search():
     global Context, textold
-    print({row['Speeker']})
-    if {row['Speeker']} == {'Gemini'}: 
-      print("Gemini")
-      Context +=  "Ignoriert: ", textold if {row['Text']} == "Ignoriert" else "Frage: ", textold , "Antwort: ", {row['Text']}
+    if row['Speeker'] == 'Gemini': 
+      if row['Text'].rstrip() == "Ignoriert":
+        Context += "Ignoriert: " + textold + " \n"
+      else:
+        Context += "Frage: " + textold + " Antwort: " + row['Text'].rstrip() + " \n" 
     else:
-      print("Else")
-      textold = {row['Text']}
-  print("Context:", Context)
+      textold = row['Text']
   if search == "true":
     response = client.models.generate_content(
       model="gemini-2.0-flash",
