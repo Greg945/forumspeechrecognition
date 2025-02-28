@@ -13,11 +13,20 @@ google_search_tool = Tool(
     google_search = GoogleSearch()
 )
 
+
+Context = ""
+textold = ""
+
 @anvil.server.callable
 def gemini(text, counter, search):
-  Context = ""
+  
   for row in app_tables.context.search():
-    Context += f"'{row['Speeker']}' : '{row['Text']}',"
+    global Context, textold
+    if {row['Speeker']} == "Gemini": 
+      Context +=  "Ignoriert: ", textold if {row['Text']} == "Ignoriert" else "Frage: ", textold , "Antwort: ", {row['Text']}
+    else:
+      textold = {row['Text']}
+  print("Context:", Context)
   if search == "true":
     response = client.models.generate_content(
       model="gemini-2.0-flash",
