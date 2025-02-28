@@ -22,9 +22,12 @@ def gemini(text, counter, search):
   
   for row in app_tables.context.search():
     global Context, textold
-    if {row['Speeker']} == "Gemini": 
+    print({row['Speeker']})
+    if {row['Speeker']} == {'Gemini'}: 
+      print("Gemini")
       Context +=  "Ignoriert: ", textold if {row['Text']} == "Ignoriert" else "Frage: ", textold , "Antwort: ", {row['Text']}
     else:
+      print("Else")
       textold = {row['Text']}
   print("Context:", Context)
   if search == "true":

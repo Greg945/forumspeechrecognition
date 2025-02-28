@@ -7,6 +7,7 @@ from anvil.tables import app_tables
 import anvil.js.window as window
 import anvil.js
 from anvil.js.window import close, history, open
+import random
 
 counter=0
 checked=0
@@ -149,12 +150,8 @@ class Form1(Form1Template):
   
     def input_box_pressed_enter(self, **event_args):
       global searchchecked
-      print('Apicall for: ', self.input_box.text)
-      if searchchecked == 1:
-        print("test")
-        response = anvil.server.call("gemini", self.input_box.text, counter, "true")
-      else:
-                response = anvil.server.call("gemini", self.input_box.text, counter, "false")
+      response = anvil.server.call("gemini", self.input_box.text, counter, "true" if searchchecked == 1 else "false")
+      print('Apicall for:', final_text)
       self.output_box.text = response
       self.input_box.text = ''
 
@@ -182,6 +179,15 @@ class Form1(Form1Template):
       close()
       open("https://login.schulportal.hessen.de/?url=aHR0cHM6Ly9jb25uZWN0LnNjaHVscG9ydGFsLmhlc3Nlbi5kZS8=&skin=sp&i=5120")
       history.back()
+
+    def rndtest_click(self, **event_args):
+      liste = ["Apfel", "Was ist die Hauptstadt von Berlin?", "Kirsche", "Hallo", "Wie hoch ist der Eifelturm"]
+      rndm_word = random.choice(liste)
+      response = anvil.server.call("gemini", rndm_word, counter, "true" if searchchecked == 1 else "false")
+      print('Apicall for:', rndm_word)
+      self.output_box.text = response
+      
+      
       
       
       
