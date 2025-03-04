@@ -163,7 +163,7 @@ class Form1(Form1Template):
         sttlang = "de-DE"
       if self.language.selected_value == "Englisch":
         print("englisch")
-        sttlang = "en-UK"
+        sttlang = "en-GB"
       if self.language.selected_value == "Französisch":
         print("frnace")
         sttlang = "fr-FR"
