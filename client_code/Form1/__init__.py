@@ -32,7 +32,7 @@ class Form1(Form1Template):
         self.recognition.continuous = True  # Fortlaufende Erkennung
         self.recognition.lang = sttlang
         self.recognition.interimResults = False  # Zwischenresultate anzeigen
-        self.recognition.maxAlternatives = 1
+        
 
         self.recognition.onresult = self.on_result
         self.recognition.onerror = self.on_error
