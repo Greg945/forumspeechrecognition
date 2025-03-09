@@ -90,7 +90,7 @@ class Form1(Form1Template):
         final_text = ''
 
         for i in range(event.results.length):
-            transcript = event.results[i][0].transcript
+            transcript = event.results[0][0].transcript
             if event.results[i].isFinal:
                 final_text = transcript.strip()
 
